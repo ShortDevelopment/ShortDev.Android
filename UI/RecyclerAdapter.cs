@@ -3,23 +3,18 @@ using AndroidX.RecyclerView.Widget;
 
 namespace ShortDev.Android.UI;
 
-public sealed class RecyclerViewAdapter<T> : RecyclerView.Adapter
+public sealed class RecyclerViewAdapter<T>(AdapterDescriptor<T> descriptor, IReadOnlyList<T> data) : RecyclerView.Adapter
 {
-    public AdapterDescriptor<T> Descriptor { get; }
-    public IReadOnlyList<T> Data { get; }
-    public RecyclerViewAdapter(AdapterDescriptor<T> descriptor, IEnumerable<T> data)
-    {
-        Descriptor = descriptor;
-        Data = new List<T>(data);
-    }
+    public AdapterDescriptor<T> Descriptor { get; } = descriptor;
+    public IReadOnlyList<T> Data { get; } = data;
+
+    public RecyclerViewAdapter(AdapterDescriptor<T> descriptor, IEnumerable<T> data) : this(descriptor, new List<T>(data)) { }
 
     public override int ItemCount
         => Data.Count;
 
     public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
-    {
-        Descriptor.InflateAction(holder.ItemView, Data[position]);
-    }
+        => Descriptor.InflateAction(holder.ItemView, Data[position]);
 
     public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
     {
@@ -27,8 +22,7 @@ public sealed class RecyclerViewAdapter<T> : RecyclerView.Adapter
         return new ViewHolder(view!);
     }
 
-    sealed class ViewHolder : RecyclerView.ViewHolder
+    sealed class ViewHolder(View view) : RecyclerView.ViewHolder(view)
     {
-        public ViewHolder(View view) : base(view) { }
     }
 }

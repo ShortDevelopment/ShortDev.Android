@@ -2,15 +2,12 @@
 
 namespace ShortDev.Android.UI;
 
-public sealed class ListAdapter<T> : BaseAdapter<T>
+public sealed class ListAdapter<T>(AdapterDescriptor<T> descriptor, IReadOnlyList<T> data) : BaseAdapter<T>
 {
-    public AdapterDescriptor<T> Descriptor { get; }
-    public IReadOnlyList<T> Data { get; }
-    public ListAdapter(AdapterDescriptor<T> descriptor, IEnumerable<T> data)
-    {
-        Descriptor = descriptor;
-        Data = new List<T>(data);
-    }
+    public AdapterDescriptor<T> Descriptor { get; } = descriptor;
+    public IReadOnlyList<T> Data { get; } = data;
+
+    public ListAdapter(AdapterDescriptor<T> descriptor, IEnumerable<T> data) : this(descriptor, new List<T>(data)) { }
 
     public override T this[int position]
         => Data[position];

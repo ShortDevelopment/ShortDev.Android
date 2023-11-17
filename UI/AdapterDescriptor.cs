@@ -2,16 +2,10 @@
 
 namespace ShortDev.Android.UI;
 
-public sealed class AdapterDescriptor<T>
+public sealed class AdapterDescriptor<T>(int viewId, AdapterDescriptor<T>.ListAdapterInflateAction inflateAction)
 {
-    public AdapterDescriptor(int viewId, ListAdapterInflateAction inflateAction)
-    {
-        ViewId = viewId;
-        InflateAction = inflateAction;
-    }
-
-    public int ViewId { get; }
-    public ListAdapterInflateAction InflateAction { get; }
+    public int ViewId { get; } = viewId;
+    public ListAdapterInflateAction InflateAction { get; } = inflateAction;
 
     public delegate void ListAdapterInflateAction(View view, T item);
 
