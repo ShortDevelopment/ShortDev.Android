@@ -1,28 +1,70 @@
 ﻿using Android.Views;
 using AndroidX.RecyclerView.Widget;
+using System.Collections.Specialized;
 
 namespace ShortDev.Android.UI;
 
-public sealed class RecyclerViewAdapter<T>(AdapterDescriptor<T> descriptor, IReadOnlyList<T> data) : RecyclerView.Adapter
+public sealed class RecyclerViewAdapter<T> : RecyclerView.Adapter
 {
-    public AdapterDescriptor<T> Descriptor { get; } = descriptor;
-    public IReadOnlyList<T> Data { get; } = data;
+    public required AdapterDescriptor<T> Descriptor { get; init; }
 
-    public RecyclerViewAdapter(AdapterDescriptor<T> descriptor, IEnumerable<T> data) : this(descriptor, new List<T>(data)) { }
+    #region Data
+    IReadOnlyList<T>? _itemsSource;
+    public required IReadOnlyList<T> ItemsSource
+    {
+        get => _itemsSource ?? throw new NullReferenceException("No Data");
+        set
+        {
+            if (_itemsSource is INotifyCollectionChanged oldObservable)
+                oldObservable.CollectionChanged -= OnCollectionChanged;
+
+            bool firstChange = _itemsSource is null;
+
+            _itemsSource = value;
+
+            if (!firstChange)
+                NotifyDataSetChanged();
+
+            if (_itemsSource is INotifyCollectionChanged observable)
+                observable.CollectionChanged += OnCollectionChanged;
+        }
+    }
+
+    private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+                NotifyItemInserted(e.NewStartingIndex);
+                break;
+            case NotifyCollectionChangedAction.Remove:
+                NotifyItemRemoved(e.OldStartingIndex);
+                break;
+            case NotifyCollectionChangedAction.Replace:
+                NotifyItemChanged(e.NewStartingIndex);
+                break;
+            case NotifyCollectionChangedAction.Move:
+                NotifyItemMoved(e.OldStartingIndex, e.NewStartingIndex);
+                break;
+            case NotifyCollectionChangedAction.Reset:
+                NotifyDataSetChanged();
+                break;
+        }
+    }
+    #endregion
 
     public override int ItemCount
-        => Data.Count;
+        => ItemsSource.Count;
 
     public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
-        => Descriptor.InflateAction(holder.ItemView, Data[position]);
+        => Descriptor.InflateAction(holder.ItemView, ItemsSource[position]);
 
     public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
     {
-        var view = LayoutInflater.From(parent.Context)!.Inflate(Descriptor.ViewId, parent, false);
-        return new ViewHolder(view!);
+        var view = LayoutInflater.From(parent.Context)?
+            .Inflate(Descriptor.ViewId, parent, false) ?? throw new NullReferenceException("Inflated view was null");
+        return new ViewHolder(view);
     }
 
-    sealed class ViewHolder(View view) : RecyclerView.ViewHolder(view)
-    {
-    }
+    sealed class ViewHolder(View view) : RecyclerView.ViewHolder(view) { }
 }

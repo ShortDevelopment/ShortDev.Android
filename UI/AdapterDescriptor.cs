@@ -12,6 +12,6 @@ public sealed class AdapterDescriptor<T>(int viewId, AdapterDescriptor<T>.ListAd
     public ListAdapter<T> CreateListAdapter(IEnumerable<T> data)
         => new(this, data);
 
-    public RecyclerViewAdapter<T> CreateRecyclerViewAdapter(IEnumerable<T> data)
-        => new(this, data);
+    public RecyclerViewAdapter<T> CreateRecyclerViewAdapter(IReadOnlyList<T> data)
+        => new() { Descriptor = this, ItemsSource = data };
 }
