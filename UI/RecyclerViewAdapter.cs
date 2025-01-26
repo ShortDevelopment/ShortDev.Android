@@ -6,26 +6,26 @@ namespace ShortDev.Android.UI;
 
 public sealed class RecyclerViewAdapter<T> : RecyclerView.Adapter
 {
-    public required AdapterDescriptor<T> Descriptor { get; init; }
+    public required int LayoutId { get; init; }
+    public required ViewBindAction<T> OnBind { get; init; }
 
     #region Data
-    IReadOnlyList<T>? _itemsSource;
     public required IReadOnlyList<T> ItemsSource
     {
-        get => _itemsSource ?? throw new NullReferenceException("No Data");
+        get => field ?? throw new NullReferenceException("No Data");
         set
         {
-            if (_itemsSource is INotifyCollectionChanged oldObservable)
+            if (field is INotifyCollectionChanged oldObservable)
                 oldObservable.CollectionChanged -= OnCollectionChanged;
 
-            bool firstChange = _itemsSource is null;
+            bool firstChange = field is null;
 
-            _itemsSource = value;
+            field = value;
 
             if (!firstChange)
                 NotifyDataSetChanged();
 
-            if (_itemsSource is INotifyCollectionChanged observable)
+            if (field is INotifyCollectionChanged observable)
                 observable.CollectionChanged += OnCollectionChanged;
         }
     }
@@ -56,15 +56,15 @@ public sealed class RecyclerViewAdapter<T> : RecyclerView.Adapter
     public override int ItemCount
         => ItemsSource.Count;
 
-    public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
-        => Descriptor.InflateAction(holder.ItemView, ItemsSource[position]);
-
     public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
     {
         var view = LayoutInflater.From(parent.Context)?
-            .Inflate(Descriptor.ViewId, parent, false) ?? throw new NullReferenceException("Inflated view was null");
+            .Inflate(LayoutId, parent, false) ?? throw new NullReferenceException("Inflated view was null");
         return new ViewHolder(view);
     }
 
-    sealed class ViewHolder(View view) : RecyclerView.ViewHolder(view) { }
+    public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
+        => OnBind(holder.ItemView, position, ItemsSource[position]);
+
+    sealed class ViewHolder(View view) : RecyclerView.ViewHolder(view);
 }
