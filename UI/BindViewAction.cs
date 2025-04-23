@@ -1,3 +1,5 @@
-﻿namespace ShortDev.Android.UI;
+﻿using Android.Views;
 
-public delegate void BindViewAction<T>(int index, T item);
+namespace ShortDev.Android.UI;
+
+public delegate void BindViewAction<T>(View view, T item, int index);

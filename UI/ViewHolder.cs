@@ -15,5 +15,5 @@ internal sealed class ActionViewHolder<T>(View view) : ViewHolder<T>(view)
     public required BindViewAction<T> OnBind { get; init; }
 
     public override void Bind(int index, T item)
-        => OnBind(index, item);
+        => OnBind(ItemView, item, index);
 }
