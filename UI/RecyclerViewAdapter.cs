@@ -7,7 +7,7 @@ namespace ShortDev.Android.UI;
 public sealed class RecyclerViewAdapter<T> : RecyclerView.Adapter
 {
     public required int LayoutId { get; init; }
-    public required ViewBindAction<T> OnBind { get; init; }
+    public required ViewHolderFactory<T> Factory { get; init; }
 
     #region Data
     public required IReadOnlyList<T> ItemsSource
@@ -60,11 +60,22 @@ public sealed class RecyclerViewAdapter<T> : RecyclerView.Adapter
     {
         var view = LayoutInflater.From(parent.Context)?
             .Inflate(LayoutId, parent, false) ?? throw new NullReferenceException("Inflated view was null");
-        return new ViewHolder(view);
+        return Factory(view);
     }
 
     public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
-        => OnBind(holder.ItemView, position, ItemsSource[position]);
+    {
+        if (holder is not ViewHolder<T> viewHolder)
+            return;
 
-    sealed class ViewHolder(View view) : RecyclerView.ViewHolder(view);
+        viewHolder.Bind(position, ItemsSource[position]);
+    }
+
+    public override void OnViewRecycled(Java.Lang.Object holder)
+    {
+        if (holder is not ViewHolder<T> viewHolder)
+            return;
+
+        viewHolder.Recycle();
+    }
 }

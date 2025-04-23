@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<WarningsAsErrors>nullable</WarningsAsErrors>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>0.2.0-beta</Version>
+		<Version>0.3.0-beta</Version>
 		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
