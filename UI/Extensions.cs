@@ -1,4 +1,6 @@
-﻿namespace ShortDev.Android.UI;
+﻿using AndroidX.Lifecycle;
+
+namespace ShortDev.Android.UI;
 
 public static class Extensions
 {
@@ -14,4 +16,9 @@ public static class Extensions
 
     public static RecyclerViewAdapter<T> CreateAdapter<T>(this IReadOnlyList<T> list, int layoutId, BindViewAction<T> onBind)
         => list.CreateAdapter(layoutId, view => new ActionViewHolder<T>(view) { OnBind = onBind });
+
+    extension(ILifecycleOwner owner)
+    {
+        public bool IsAtLeastStarted => owner.Lifecycle.CurrentState.IsAtLeast(Lifecycle.State.Started!);
+    }
 }
