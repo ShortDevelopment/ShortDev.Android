@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-android;net9.0-android</TargetFrameworks>
+		<TargetFrameworks>net9.0-android;net10.0-android</TargetFrameworks>
 		<SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
 		<Nullable>enable</Nullable>
 		<WarningsAsErrors>nullable</WarningsAsErrors>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>0.4.1-beta</Version>
-		<LangVersion>preview</LangVersion>
+		<Version>0.5.0-beta</Version>
+		<LangVersion>14</LangVersion>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -16,7 +16,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Xamarin.AndroidX.RecyclerView" Version="1.4.0" />
+		<PackageReference Include="Xamarin.AndroidX.RecyclerView" Version="1.4.0.3" />
 		<None Include="LICENSE.txt" Pack="true" PackagePath="/" />
 	</ItemGroup>
 </Project>
