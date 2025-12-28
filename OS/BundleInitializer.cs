@@ -18,7 +18,7 @@ namespace ShortDev.Android.OS;
 /// }
 /// </code>
 /// </example>
-readonly struct BundleInitializer() : IEnumerable<KeyValuePair<string, Java.Lang.Object?>>
+public readonly struct BundleInitializer() : IEnumerable<KeyValuePair<string, Java.Lang.Object?>>
 {
     readonly Bundle _bundle = new();
 
