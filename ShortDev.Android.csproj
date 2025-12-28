@@ -10,13 +10,16 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
+		<Description>Utils for .NET Android development.</Description>
 		<Authors>ShortDevelopment</Authors>
 		<RepositoryUrl>https://github.com/ShortDevelopment/ShortDev.Android</RepositoryUrl>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Xamarin.AndroidX.RecyclerView" Version="1.4.0.3" />
 		<None Include="LICENSE.txt" Pack="true" PackagePath="/" />
+		<None Include="README.md" Pack="true" PackagePath="/" />
 	</ItemGroup>
 </Project>
