@@ -19,7 +19,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Xamarin.AndroidX.RecyclerView" Version="1.4.0.3" />
-		<None Include="LICENSE.txt" Pack="true" PackagePath="/" />
+		<None Include="../LICENSE.txt" Pack="true" PackagePath="/" />
 		<None Include="README.md" Pack="true" PackagePath="/" />
 	</ItemGroup>
 </Project>
