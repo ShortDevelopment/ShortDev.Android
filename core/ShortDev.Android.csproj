@@ -7,6 +7,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Version>0.6.0-beta</Version>
 		<LangVersion>15</LangVersion>
+		<IsAotCompatible>true</IsAotCompatible>
 	</PropertyGroup>
 
 	<PropertyGroup>
